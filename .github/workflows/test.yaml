@@ -1,0 +1,18 @@
+name: Tests
+
+on:
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout
+
+      - name: Run make tests
+        shell: bash
+        run: make tests

@@ -1,0 +1,74 @@
+name: Create issue
+description: Creates an issue
+
+branding:
+  icon: git-pull-request
+  color: gray-dark
+
+inputs:
+  token:
+    description: Your Github PAT, defaults to actions token
+    default: ${{ github.token }}
+    required: true
+  repo:
+    description: GitHub repository to create/update/close an issue in
+    default: ${{ github.repository }}
+    required: true
+  mode:
+    description: >
+      Dictates whether to create, update or close an issue.
+      Valid options: create | close
+    default: create
+  state:
+    description: >
+      State of issue to create, update or close.
+      Valid options: open | closed | all
+    default: open
+  title:
+    description: Title of issue to create or update
+    required: true
+  labels:
+    description: Labels (comma-separated) to both create the issue with and to filter the existing issue search with
+    required: false
+  assignees:
+    description: GitHub handle of the user(s) to assign the issue (comma-separated), only used for issue creation
+    required: false
+  body:
+    description: Body text of the issue
+    required: false
+  comment:
+    description: >
+      If set, an existing issue have this comment added to the issue.
+      Note, if the mode is set to create, then any previously added comment is updated instead
+    required: false
+
+outputs:
+  url:
+    description: URL of the issue that was created
+    value: ${{ steps.action.outputs.url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check dependencies are installed
+      shell: bash
+      run: |
+        if ! command -v gh >/dev/null 2>&1; then
+          echo "Command gh not found. This CLI tool is required."
+          exit 1
+        fi
+
+    - name: Create issue
+      id: action
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        INPUT_REPO: ${{ inputs.repo }}
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_STATE: ${{ inputs.state }}
+        INPUT_TITLE: ${{ inputs.title }}
+        INPUT_LABELS: ${{ inputs.labels }}
+        INPUT_ASSIGNEES: ${{ inputs.assignees }}
+        INPUT_BODY: ${{ inputs.body }}
+        INPUT_COMMENT: ${{ inputs.comment }}
+      run: chmod +x "${{ github.action_path }}/scripts/main.sh" && "${{ github.action_path }}/src/main.sh"
