@@ -13,6 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout
 
-      - name: Run make tests
+      - name: Run tests
         shell: bash
-        run: make tests
+        run: make test
