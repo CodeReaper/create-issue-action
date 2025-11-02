@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # cspell:ignore endgroup
 
-set -euo pipefail
+set -eu
 
 MODE="${INPUT_MODE:-create}"
 STATE="${INPUT_STATE:-open}"
@@ -33,32 +33,32 @@ ISSUE_NUMBER=$(gh issue list --repo "${REPO}" --state "${STATE}" --label "${LABE
 case "${MODE}" in
 create)
   # Determine body args
-  if [[ -n "${BODY}" ]]; then
-    BODY_ARGS=(--body "\"${BODY}\"")
+  if [ -n "${BODY}" ]; then
+    BODY_ARGS="\"${BODY}\""
   else
-    BODY_ARGS=(--body "\"Auto-generated issue with title: ${TITLE}\"")
+    BODY_ARGS="\"Auto-generated issue with title: ${TITLE}\""
   fi
 
-  if [[ -n "${ISSUE_NUMBER}" ]]; then
+  if [ -n "${ISSUE_NUMBER}" ]; then
     echo "Issue already exists (#${ISSUE_NUMBER}), updating instead."
-    if [[ -n "${COMMENT}" ]]; then
+    if [ -n "${COMMENT}" ]; then
       echo "Adding comment to existing issue..."
       gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}"
     else
       echo "Updating issue body..."
-      gh issue edit "${ISSUE_NUMBER}" --repo "${REPO}" --title "${TITLE}" "${BODY_ARGS[@]}"
+      gh issue edit "${ISSUE_NUMBER}" --repo "${REPO}" --title "${TITLE}" --body "${BODY_ARGS}"
     fi
   else
     echo "Creating new issue..."
-    gh issue create --repo "${REPO}" --title "${TITLE}" "${BODY_ARGS[@]}" --label "${LABELS}" --assignee "${ASSIGNEES}"
+    gh issue create --repo "${REPO}" --title "${TITLE}" --body "${BODY_ARGS}" --label "${LABELS}" --assignee "${ASSIGNEES}"
   fi
   ;;
 close)
-  if [[ -z "${ISSUE_NUMBER}" ]]; then
+  if [ -z "${ISSUE_NUMBER}" ]; then
     echo "No matching issue found to close."
     exit 0
   fi
-  if [[ -n "${COMMENT}" ]]; then
+  if [ -n "${COMMENT}" ]; then
     echo "Adding closure comment..."
     gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}"
   fi

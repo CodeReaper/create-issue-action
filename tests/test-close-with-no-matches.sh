@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # shellcheck source=utils.sh
-source tests/utils.sh
+. tests/utils.sh
 
 export INPUT_MODE="close"
 export INPUT_TITLE="Hello world"

@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 case "$*" in
 *"issue list"*)
   # Simulate no issue found unless overridden
-  if [[ "${GH_FAKE_MODE:-none}" == "issue-exists" ]]; then
+  if [ "${GH_FAKE_MODE:-none}" = "issue-exists" ]; then
     echo '42'
   else
     echo ''

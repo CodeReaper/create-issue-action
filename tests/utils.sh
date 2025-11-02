@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 SCRIPT_PATH=src/main.sh
 TMPDIR=$(mktemp -d)
@@ -8,9 +8,12 @@ PATH="${TMPDIR}:${PATH}"
 
 # Assert helper
 assert_contains() {
-  local haystack="$1"
-  local needle="$2"
-  if ! grep -qF "$needle" <<<"$haystack"; then
+  haystack="$1"
+  needle="$2"
+
+  # if ! eval printf "%s" "$haystack" | grep -qF "$needle"; then
+  # if ! grep -qF "$needle" <<<"$haystack"; then
+  if ! printf '%s' "$haystack" | grep -qF "$needle"; then
     echo "Expected output to contain '$needle' but it didn't"
     echo "-----"
     echo "$haystack"
