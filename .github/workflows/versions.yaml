@@ -1,0 +1,33 @@
+name: Automatically update major tags
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  update-major-tag:
+    name: Update major tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Configure git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Update tags
+        run: |
+          set -eu
+
+          NEW_TAG="${GITHUB_REF#refs/tags/}"
+          [ -z "$NEW_TAG" ] && exit 10
+
+          MAJOR=$(expr "$NEW_TAG" : '\(v[0-9][0-9]*\)\.[0-9][0-9]*\.[0-9][0-9]*$')
+          [ -z "$MAJOR" ] && exit 20
+
+          git fetch --tags
+          git tag -f "$MAJOR" "$NEW_TAG"
+          git push origin "$MAJOR" --force
