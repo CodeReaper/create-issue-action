@@ -9,6 +9,8 @@ jobs:
   update-major-tag:
     name: Update major tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -30,6 +32,8 @@ jobs:
 
           MAJOR=$(expr "$NEW_TAG" : '\(v[0-9][0-9]*\)\.[0-9][0-9]*\.[0-9][0-9]*$')
           [ -z "$MAJOR" ] && exit 20
+
+          echo "Creating tag $MAJOR pointing to $NEW_TAG ..."
 
           git fetch --tags
           git tag -f "$MAJOR" "$NEW_TAG"
