@@ -20,17 +20,17 @@ Ideal for CI/CD workflows that need to:
 
 ## Inputs
 
-| Name        | Description                                                                       | Default                    | Required |
-| ----------- | --------------------------------------------------------------------------------- | -------------------------- | -------- |
-| `token`     | GitHub token (PAT or `${{ github.token }}`) used for authentication               | `${{ github.token }}`      | Yes      |
-| `mode`      | Operation mode: `create` or `close`                                               | `create`                   | Yes      |
-| `state`     | Issue state filter when searching for existing issues: `open`, `closed`, or `all` | `open`                     | Yes      |
-| `title`     | Title of the issue to create or update                                            | —                          | Yes      |
-| `labels`    | Comma-separated list of labels used for creation and search                       | —                          | No       |
-| `assignees` | Comma-separated list of users to assign the issue to                              | —                          | No       |
-| `body`      | Custom body text for the issue (overrides `template`)                             | —                          | No       |
-| `comment`   | Optional comment text to add to an existing issue                                 | —                          | No       |
-| `repo`      | Repository to operate on (`owner/repo`)                                           | `${{ github.repository }}` | Yes      |
+| Name        | Description                                                                                                                      | Default                  | Required |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | -------- |
+| `token`     | GitHub token (or PAT) used for authentication                                                                                    | `${{github.token}}`      | Yes      |
+| `mode`      | Operation mode: `create` or `close`                                                                                              | `create`                 | Yes      |
+| `state`     | Issue state filter when searching for existing issues: `open`, `closed`, or `all`                                                | `open`                   | Yes      |
+| `title`     | Title of the issue to create or update                                                                                           | -                        | Yes      |
+| `labels`    | Comma-separated list of labels used for creation and search                                                                      | -                        | No       |
+| `assignees` | Comma-separated list of users to assign the issue to                                                                             | -                        | No       |
+| `body`      | Optional body text for the issue                                                                                                 | -                        | No       |
+| `comment`   | Optional comment text to add to an existing issue instead of updating the issue body, or as closing comment if closing the issue | -                        | No       |
+| `repo`      | Repository to operate on (`owner/repo`)                                                                                          | `${{github.repository}}` | Yes      |
 
 ## Example Usage
 

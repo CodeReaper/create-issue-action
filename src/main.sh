@@ -29,28 +29,20 @@ echo '::endgroup::'
 
 ISSUE_NUMBER=$(gh issue list --repo "${REPO}" --state "${STATE}" --label "${LABELS}" --search "in:title \"${TITLE}\"" --limit 1 --json number --jq '.[].number' || true)
 
-# Perform action based on mode
 case "${MODE}" in
 create)
-  # Determine body args
-  if [ -n "${BODY}" ]; then
-    BODY_ARGS="\"${BODY}\""
-  else
-    BODY_ARGS="\"Auto-generated issue with title: ${TITLE}\""
-  fi
-
   if [ -n "${ISSUE_NUMBER}" ]; then
     echo "Issue already exists (#${ISSUE_NUMBER}), updating instead."
     if [ -n "${COMMENT}" ]; then
       echo "Adding comment to existing issue..."
-      gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}"
+      gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}" --edit-last --create-if-none --yes
     else
       echo "Updating issue body..."
-      gh issue edit "${ISSUE_NUMBER}" --repo "${REPO}" --title "${TITLE}" --body "${BODY_ARGS}"
+      gh issue edit "${ISSUE_NUMBER}" --repo "${REPO}" --title "${TITLE}" --body "${BODY}"
     fi
   else
     echo "Creating new issue..."
-    gh issue create --repo "${REPO}" --title "${TITLE}" --body "${BODY_ARGS}" --label "${LABELS}" --assignee "${ASSIGNEES}"
+    gh issue create --repo "${REPO}" --title "${TITLE}" --body "${BODY}" --label "${LABELS}" --assignee "${ASSIGNEES}"
   fi
   ;;
 close)
@@ -59,11 +51,12 @@ close)
     exit 0
   fi
   if [ -n "${COMMENT}" ]; then
-    echo "Adding closure comment..."
-    gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}"
+    echo "Closing issue #${ISSUE_NUMBER} with comment..."
+    gh issue close "${ISSUE_NUMBER}" --repo "${REPO}" --comment "${COMMENT}"
+  else
+    echo "Closing issue #${ISSUE_NUMBER}..."
+    gh issue close "${ISSUE_NUMBER}" --repo "${REPO}"
   fi
-  echo "Closing issue #${ISSUE_NUMBER}..."
-  gh issue close "${ISSUE_NUMBER}" --repo "${REPO}"
   ;;
 *)
   echo "Invalid mode '${MODE}'. Valid options: create | close"
