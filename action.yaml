@@ -71,4 +71,4 @@ runs:
         INPUT_ASSIGNEES: ${{ inputs.assignees }}
         INPUT_BODY: ${{ inputs.body }}
         INPUT_COMMENT: ${{ inputs.comment }}
-      run: chmod +x "${{ github.action_path }}/scripts/main.sh" && "${{ github.action_path }}/src/main.sh"
+      run: chmod +x "${{ github.action_path }}/src/main.sh" && "${{ github.action_path }}/src/main.sh"
