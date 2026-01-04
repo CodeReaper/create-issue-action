@@ -35,7 +35,7 @@ create)
     echo "Issue already exists (#${ISSUE_NUMBER}), updating instead."
     if [ -n "${COMMENT}" ]; then
       echo "Adding comment to existing issue..."
-      gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}" --edit-last --create-if-none --yes
+      gh issue comment "${ISSUE_NUMBER}" --repo "${REPO}" --body "${COMMENT}" --edit-last --create-if-none
     else
       echo "Updating issue body..."
       gh issue edit "${ISSUE_NUMBER}" --repo "${REPO}" --title "${TITLE}" --body "${BODY}"
